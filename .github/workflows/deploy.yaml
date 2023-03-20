@@ -1,0 +1,40 @@
+name: Build and publish to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: '2.17.0.1'
+
+      - name: Build
+        run: make
+
+      - name: Upload page artifacts
+        uses: actions/upload-pages-artifact@v1 # This action is specific to github pages
+        with:
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
