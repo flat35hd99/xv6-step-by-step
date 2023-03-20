@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build-and-deploy-pages:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -28,12 +28,13 @@ jobs:
           pandoc-version: '2.17.0.1'
 
       - name: Build
+        working-directory: ./docs
         run: make
 
       - name: Upload page artifacts
         uses: actions/upload-pages-artifact@v1 # This action is specific to github pages
         with:
-          path: ./dist
+          path: ./docs/dist
 
       - name: Deploy to GitHub Pages
         id: deployment
