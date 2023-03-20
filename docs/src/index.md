@@ -1,17 +1,3 @@
 ---
-title: This is title
+title: xv6をゼロから作る
 ---
-
-## Template header
-
-The link to [sub/index.md](./sub) can be written like:
-
-```markdown
-[sub/index.md](sub)
-```
-
-The link to [sub_but_same_dir.md](sub_but_same_dir.html) is:
-
-```markdown
-[sub_but_same_dir.md](sub_but_same_dir.html)
-```
