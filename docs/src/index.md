@@ -20,3 +20,20 @@ QEMU上で動かすのはブートローダを自分で書いたり、仕様を�
   - `printf.c/printfinit()`
 
 `printf()`の中身から、`uart.c`のいろいろが使われてるのがわかるので、それらを呼び出せるようにします。
+
+コンパイルと実行は、それぞれ `compile.sh`と`run.sh`を実行することで行えます。どちらも本家のMakefileから持ってきています。
+
+```console
+$ cd /path/to/xv6-step-by-step
+$ ./compile.sh
+$ ./run.sh
+hello, world
+```
+
+実行すると、"hello, world"の文字列が表示されました🎉🎉🎉
+
+### おさらい
+
+- QEMUでHello, Worldに成功した。
+- とりあえず動かすため、細かいお話、たとえばUARTの仕様やロック周りについては触れなかった。
+- CPU数は1つで実行した。
