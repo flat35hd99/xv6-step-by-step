@@ -8,8 +8,3 @@ riscv64-linux-gnu-ld \
   -T kernel/kernel.ld \
   -o kernel/kernel \
   kernel/entry.o kernel/start.o
-
-$(QEMU) \
-  -machine virt -bios none -kernel $K/kernel -m 128M -smp $(CPUS) -nographic \
-  -global virtio-mmio.force-legacy=false \
-  -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
