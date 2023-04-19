@@ -37,3 +37,24 @@ hello, world
 - QEMUでHello, Worldに成功した。
 - とりあえず動かすため、細かいお話、たとえばUARTの仕様やロック周りについては触れなかった。
 - CPU数は1つで実行した。
+
+## マルチコアでHello, World!
+
+`run.sh`と`start.c`のCPUSの宣言を`1`から`2`へ変更して実行すると以下のように`hello, world`が連続して表示されます。
+
+```
+$ ./run.sh 
+hello, world
+hello, world
+```
+
+問題なさそうです。ここから、cpu数に応じて、表示される`hello, world`の数が比例して増加すると予想できます。CPUS=3のときを試すと
+
+```
+$ ./run.sh 
+hhello, world
+ello, world
+hello, world
+```
+
+残念ながら崩れてしまいました。これはきっと、複数のコアが同時に一つのUARTのバッファかレジスタ、またはその両方へ書き込みを行っているために生じる現象だと推察されます。いわゆる、"race condition"です。

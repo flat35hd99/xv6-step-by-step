@@ -1,4 +1,4 @@
-#define NCPU 1
+#define NCPU 3
 
 // entry.S needs one stack per CPU.
 __attribute__ ((aligned (16))) char stack0[4096 * NCPU];
@@ -100,17 +100,30 @@ uartstart()
   }
 }
 
-void start() {
-  // とりあえずhello, worldしたい
-  // 文字出力するには、特定のレジスタに文字列のデータを流し込めばいい
+// which hart (core) is this?
+// "hart" means "hardware threads"
+static inline uint64
+r_mhartid()
+{
+  uint64 x;
+  asm volatile("csrr %0, mhartid" : "=r" (x) );
+  return x;
+}
+
+void hello_world() {
   int n = 14;
   char *hw_chars = "hello, world\n";
   for (int i = 0; i < n; i++)
   {
     uartputc_sync(hw_chars[i]);
   }
-  
-  
+}
+
+void start() {
+
+  // if (r_mhartid() == 0)
+    hello_world();
+
   while (1)
   {
     ;
