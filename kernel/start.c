@@ -1,4 +1,4 @@
-#define NCPU 3
+#define NCPU 2
 
 // entry.S needs one stack per CPU.
 __attribute__ ((aligned (16))) char stack0[4096 * NCPU];
@@ -121,7 +121,7 @@ void hello_world() {
 
 void start() {
 
-  // if (r_mhartid() == 0)
+  if (r_mhartid() == 0)
     hello_world();
 
   while (1)
