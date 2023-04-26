@@ -8,3 +8,5 @@ riscv64-linux-gnu-ld \
   -T kernel/kernel.ld \
   -o kernel/kernel \
   kernel/entry.o kernel/start.o
+
+riscv64-linux-gnu-objcopy -O binary kernel/kernel kernel/kernel.bin

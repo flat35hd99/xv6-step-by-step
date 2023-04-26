@@ -1,4 +1,4 @@
-#define NCPU 2
+#define NCPU 4
 
 // entry.S needs one stack per CPU.
 __attribute__ ((aligned (16))) char stack0[4096 * NCPU];
@@ -8,13 +8,19 @@ typedef unsigned long uint64;
 
 // >> kernel/memlayout.h
 // qemu puts UART registers here in physical memory.
-#define UART0 0x10000000L
+#define UART0 0x0010000000
+#define UART1 0x0010010000
+#define UART2 0x0010020000
+#define UART3 0x0012000000
+#define UART4 0x0012010000
+#define UART5 0x0012020000
+#define UART UART0
 
 // >> kernel/uart.c
 // the UART control registers are memory-mapped
 // at address UART0. this macro returns the
 // address of one of the registers.
-#define Reg(reg) ((volatile unsigned char *)(UART0 + reg))
+#define Reg(reg) ((volatile unsigned char *)(UART + reg))
 
 // the UART control registers.
 // some have different meanings for
