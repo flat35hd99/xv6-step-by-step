@@ -1,3 +1,4 @@
 *.o
 *.d
 kernel/kernel
+kernel/kernel.bin
