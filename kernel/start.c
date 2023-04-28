@@ -69,8 +69,8 @@ uartputc_sync(int c)
   // }
 
   // wait for Transmit Holding Empty to be set in LSR.
-  while((ReadReg(LSR) & LSR_TX_IDLE) == 0)
-    ;
+  // while((ReadReg(LSR) & LSR_TX_IDLE) == 0)
+  //   ;
   WriteReg(THR, c);
 
   // pop_off();
@@ -125,10 +125,11 @@ void hello_world() {
   }
 }
 
-void start() {
+// hartid start from 1 to 4
+void start(int hartid) {
 
-  if (r_mhartid() == 0)
-    hello_world();
+  if (hartid == 1)
+     hello_world();
 
   while (1)
   {
