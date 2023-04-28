@@ -9,4 +9,9 @@ riscv64-linux-gnu-ld \
   -o kernel/kernel \
   kernel/entry.o kernel/start.o
 
-riscv64-linux-gnu-objcopy -O binary kernel/kernel kernel/kernel.bin
+# Output files for debug
+if [ ! -d debug ];then
+  mkdir debug
+fi
+riscv64-linux-gnu-objcopy -O binary kernel/kernel debug/kernel.bin
+riscv64-linux-gnu-objdump -D kernel/kernel > debug/kernel.S
