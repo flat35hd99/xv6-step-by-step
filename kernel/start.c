@@ -125,10 +125,10 @@ void hello_world() {
   }
 }
 
-// hartid start from 1 to 4
+// hartid start from 0 to 3
 void start(int hartid) {
 
-  if (hartid == 1)
+  if (hartid == 0)
      hello_world();
 
   while (1)

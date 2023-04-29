@@ -11,9 +11,12 @@ _entry:
         # sp = stack0 + (hartid * 4096)
         la sp, stack0
         li t0, 1024*4
-        addi a0, tp, 0
-        mul t0, t0, a0
+        addi t1, tp, 0
+        mul t0, t0, t1
         add sp, sp, t0
+
+        # Pass hart id(0..3)
+        addi a0, tp, -1
 
         # jump to start() in start.c
         call start
