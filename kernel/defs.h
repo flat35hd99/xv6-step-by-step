@@ -1,10 +1,6 @@
-#include "types.h"
-
 #define NCPU 4
 
-struct spinlock {
-    uint locked;
-};
+struct spinlock;
 
 // uart.c
 void uartputc_sync(int);

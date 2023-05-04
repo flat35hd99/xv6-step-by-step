@@ -1,5 +1,6 @@
 #include "defs.h"
 #include "types.h"
+// #include "spinlock.h"
 
 // entry.S needs one stack per CPU.
 __attribute__ ((aligned (16))) char stack0[4096 * NCPU];
@@ -16,11 +17,8 @@ void hello_world() {
 }
 
 // hartid start from 0 to 3
-void start(int hartid) {
-
-  if (hartid == 0)
-    hello_world();
-
+void start(uint hartid) {
+  hello_world();
   while (1)
   {
     ;

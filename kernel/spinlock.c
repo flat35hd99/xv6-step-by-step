@@ -1,6 +1,6 @@
+#include "types.h"
+#include "spinlock.h"
 #include "defs.h"
-
-uint __acquire_spinlock(uint);
 
 void initlock(struct spinlock *lk) {
   lk->locked = 0;

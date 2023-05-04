@@ -4,9 +4,9 @@ CPUS=4
 
 K=kernel
 
+K_OBJS = kernel/entry.o # The order of objs is important.
 K_SRCS = $(shell ls kernel/*.c)
-K_OBJS = $(K_SRCS:%.c=%.o)
-K_OBJS += kernel/entry.o
+K_OBJS += $(K_SRCS:%.c=%.o)
 
 all: kernel/kernel
 
@@ -26,6 +26,7 @@ kernel/kernel: kernel/kernel.ld $(K_OBJS)
 		-T kernel/kernel.ld \
 		-o $@ \
 		$(K_OBJS)
+	$(PREFIX)objdump -D $@ > debug/kernel.S
 
 u-boot/u-boot.bin:
 	export CROSS_COMPILE=$(PREFIX) && $(MAKE) -C u-boot qemu-riscv64_defconfig
