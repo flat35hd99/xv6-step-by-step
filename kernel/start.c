@@ -1,5 +1,6 @@
 #include "defs.h"
 #include "types.h"
+#include "sbi.h"
 // #include "spinlock.h"
 
 // entry.S needs one stack per CPU.
@@ -19,6 +20,7 @@ void hello_world() {
 // hartid start from 0 to 3
 void start(uint hartid) {
   hello_world();
+  sbi_hart_start();
   while (1)
   {
     ;
