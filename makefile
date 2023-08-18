@@ -1,4 +1,4 @@
-PREFIX=riscv64-linux-gnu-
+PREFIX=riscv64-unknown-elf-
 QEMU=qemu-system-riscv64
 CPUS=4
 
@@ -11,12 +11,12 @@ K_OBJS += $(K_SRCS:%.c=%.o)
 all: kernel/kernel
 
 kernel/entry.o: kernel/entry.S
-	$(PREFIX)gcc -c -o $@ $<
+	$(PREFIX)gcc -g -c -o $@ $<
 
 kernel/%.o: kernel/%.c
 	$(PREFIX)gcc \
 		-Wall -Werror -O -fno-omit-frame-pointer \
-		-ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding \
+		-g -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding \
 		-fno-common -nostdlib -mno-relax -I. -fno-stack-protector \
 		-fno-pie -no-pie -c -o $@ $<
 
@@ -26,7 +26,7 @@ kernel/kernel: kernel/kernel.ld $(K_OBJS)
 		-T kernel/kernel.ld \
 		-o $@ \
 		$(K_OBJS)
-	$(PREFIX)objdump -D $@ > debug/kernel.S
+	$(PREFIX)objdump -S $@ > debug/kernel.S
 
 u-boot/u-boot.bin:
 	export CROSS_COMPILE=$(PREFIX) && $(MAKE) -C u-boot qemu-riscv64_defconfig
