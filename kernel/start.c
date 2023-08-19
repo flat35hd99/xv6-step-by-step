@@ -26,6 +26,8 @@ void print_newline() {
 }
 
 void start(uint hartid) {
+// void start() {
+//   uint hartid = 1;
   hello_world();
   // Check before
   for (unsigned long i = 0; i < 8; i++)
@@ -58,8 +60,8 @@ void start(uint hartid) {
   }
   print_newline();
 
-  while (1)
-  {
-    ;
-  }
+  // while (1)
+  // {
+  //   ;
+  // }
 }

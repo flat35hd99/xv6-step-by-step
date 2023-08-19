@@ -5,13 +5,19 @@
 .section .text
 .global _entry
 _entry:
-        # set up a stack for C has been completed by SBI.
-
         # Pass hartid.
-        addi a0, tp, 0
+        # addi a0, tp, 0
+        addi sp,sp,-16
+        sd   ra,16(sp)
+        sd   a0, 8(sp)
 
         # jump to start() in start.c
         call start
+        ld   a0, 8(sp)
+        ld   ra,16(sp)
+        addi sp,sp,16
+
+        ret
 
 spin:
         j spin
