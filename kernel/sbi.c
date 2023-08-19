@@ -88,13 +88,18 @@ int sbi_hart_start(unsigned long hartid) {
 	unsigned long long start_addr = (unsigned long long)&hello_world_2;
 	// unsigned long mode = 0x1;
 
+	asm volatile("csrw sscratch, %0"
+		:
+		: "r"(start_addr)
+		:
+		);
 	// a0 hartid
 	// a1 saddr
 	// a2 arg1
 	// smode(start mode)はecallしたときのprivilege mode
 	ret = sbi_ecall_2(SBI_EXT_HSM, SBI_EXT_HSM_HART_START, hartid, start_addr, 0, 0, 0, 0);
 	// ret = sbi_ecall(SBI_EXT_HSM, SBI_EXT_HSM_HART_START, hartid, start_addr, start_addr, mode, 0, 0);
-	
+
 	return ret.error;
 }
 
