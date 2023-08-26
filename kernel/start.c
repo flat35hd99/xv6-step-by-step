@@ -51,6 +51,9 @@ void start(uint hartid) {
   }
   print_newline();
 
+  // Send IPI
+  sbi_send_ipi(~hartid , 0);
+
   // Check after
   for (unsigned long i = 0; i < 8; i++)
   {
@@ -58,8 +61,20 @@ void start(uint hartid) {
   }
   print_newline();
 
+  long user_input = 0;
+  unsigned long count_result = 0;
   while (1)
   {
-    ;
+    user_input = sbi_console_getchar();
+    if (user_input > 0) {
+      // sbi_console_putchar(user_input);
+      count_result = get_count();
+      for (int i = (8 - 1); i >= 0; i--) {
+        int n = (count_result >> (i * 4) & 0xF);
+        if (n < 10) sbi_console_putchar(n + 48);
+        else        sbi_console_putchar((n - 10) + 65);
+      }
+      print_newline();
+    }
   }
 }

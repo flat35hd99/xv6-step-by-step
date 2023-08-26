@@ -25,11 +25,16 @@ enum sbi_ext_id {
 
 	SBI_EXT_HSM_HART_START = 0x0,
 	SBI_EXT_HSM_HART_GET_STATUS = 0x2,
+
+	SBI_EXT_IPI_SEND_IPI = 0x0,
 };
 
 void sbi_console_putchar(int ch);
-int sbi_console_getchar(void);
+long sbi_console_getchar(void);
 int sbi_hart_start(unsigned long hartid);
 int sbi_hart_get_status(unsigned long hartid);
+int sbi_send_ipi(unsigned long hart_mask, unsigned long hart_mask_base);
 
 #endif /* _SBI_H */
+
+unsigned long get_count();

@@ -56,7 +56,7 @@ void sbi_console_putchar(int ch)
 	sbi_ecall(SBI_EXT_0_1_CONSOLE_PUTCHAR, 0, ch, 0, 0, 0, 0, 0);
 }
 
-int sbi_console_getchar(void)
+long sbi_console_getchar(void)
 {
 	struct sbiret ret;
 
@@ -72,13 +72,23 @@ void hello_world_2() {
   char hw_chars[15] = {'H', 'e', 'l', 'l', 'o', ',', ' ', 'W', 'o', 'r', 'l', 'd', '!', CR, LF};
   for (int i = 0; i < n; i++)
   {
-    uartputc_sync(hw_chars[i]);
-    // sbi_console_putchar(hw_chars[i]);
+    // uartputc_sync(hw_chars[i]);
+    sbi_console_putchar(hw_chars[i]);
   }
 }
 
 int empty_loop() {
 	while(1){;}
+}
+
+unsigned long counter = 0xA;
+
+void increment() {
+	counter++;
+}
+
+unsigned long get_count() {
+	return counter;
 }
 
 int sbi_hart_start(unsigned long hartid) {
@@ -102,6 +112,18 @@ int sbi_hart_get_status(unsigned long hartid) {
 	struct sbiret ret;
 
 	ret = sbi_ecall(SBI_EXT_HSM, SBI_EXT_HSM_HART_GET_STATUS, hartid, 0, 0, 0, 0, 0);
+
+	if (ret.error) {
+		return ret.error;
+	} else {
+		return ret.value;
+	}
+}
+
+int sbi_send_ipi(unsigned long hart_mask, unsigned long hart_mask_base) {
+	struct sbiret ret;
+
+	ret = sbi_ecall(SBI_EXT_IPI, SBI_EXT_IPI_SEND_IPI, hart_mask, hart_mask_base, 0, 0, 0, 0);
 
 	if (ret.error) {
 		return ret.error;
