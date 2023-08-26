@@ -8,7 +8,7 @@ K_OBJS = kernel/entry.o # The order of objs is important.
 K_SRCS = $(shell ls kernel/*.c)
 K_OBJS += $(K_SRCS:%.c=%.o)
 
-all: kernel/kernel
+all: kernel/kernel kernel/kernel.bin
 
 kernel/entry.o: kernel/entry.S
 	$(PREFIX)gcc -g -c -o $@ $<
@@ -27,6 +27,9 @@ kernel/kernel: kernel/kernel.ld $(K_OBJS)
 		-o $@ \
 		$(K_OBJS)
 	$(PREFIX)objdump -S $@ > debug/kernel.S
+
+kernel/kernel.bin: kernel/kernel
+	$(PREFIX)objcopy -O binary $^ $@
 
 u-boot/u-boot.bin:
 	export CROSS_COMPILE=$(PREFIX) && $(MAKE) -C u-boot qemu-riscv64_defconfig
