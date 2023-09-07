@@ -4,10 +4,10 @@ ENTRY( _entry )
 SECTIONS
 {
   /*
-   * ensure that entry.S / _entry is at 0xB0000000,
+   * ensure that entry.S / _entry is at 0x40000000,
    * where jh7110's jumps(???)
    */
-  . = 0xB0000000;
+  . = 0x40000000;
 
   .text : {
     *(.text .text.*)

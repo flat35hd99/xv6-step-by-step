@@ -5,6 +5,10 @@
 .section .text
 .global _entry
 _entry:
+        # Do not use the hart which hartid is 0
+        # due to the hart does not support S-mode.
+        beq tp, zero, spin
+
         # set up a stack for C.
         # stack0 is declared in start.c,
         # with a 4096-byte stack per CPU.

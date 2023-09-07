@@ -3,10 +3,10 @@ PREFIX=riscv64-linux-gnu-
 K=kernel
 
 K_SRCS = $(shell ls kernel/*.c)
-K_OBJS = $(K_SRCS:%.c=%.o)
 K_OBJS += kernel/entry.o
+K_OBJS += $(K_SRCS:%.c=%.o)
 
-all: kernel/kernel
+all: kernel/kernel debug/kernel.S
 
 kernel/entry.o: kernel/entry.S
 	$(PREFIX)gcc -c -o $@ $<
@@ -25,8 +25,12 @@ kernel/kernel: kernel/kernel.ld $(K_OBJS)
 		-o $@ \
 		$(K_OBJS)
 
+debug/kernel.S: kernel/kernel
+	$(PREFIX)objdump -S $< > $@
+
 clean:
 	rm \
 		kernel/kernel \
 		kernel/*.o \
-		kernel/*.d
+		kernel/*.d \
+		debug/*.S
