@@ -28,7 +28,7 @@ void sleep(int n) {
 void start(int hartid) {
 
   // if (hartid == 0)
-  //   hello_world();
+    hello_world();
 
   uartputc_sync(65 + hartid);
   // hello_world();
