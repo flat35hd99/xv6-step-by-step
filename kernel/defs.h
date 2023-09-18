@@ -1,4 +1,4 @@
-#define NCPU 4
+#define NCPU 5
 
 struct spinlock;
 

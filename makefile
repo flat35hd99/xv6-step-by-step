@@ -1,14 +1,21 @@
+# Compiler
 PREFIX=riscv64-linux-gnu-
+
+# Emulator
 QEMU=qemu-system-riscv64
-CPUS=4
+# 仮想マシンのhartの数
+# def.hで定義した値と一致させること
+# jh7110はSモード非対応なコアが1、Sモード対応なコアが4ある
+CPUS=5
 
 K=kernel
 
 K_OBJS = kernel/entry.o # The order of objs is important.
 K_SRCS = $(shell ls kernel/*.c)
-K_OBJS += $(K_SRCS:%.c=%.o)
+K_OBJS = $(K_SRCS:%.c=%.o)
+K_OBJS += kernel/entry.o
 
-all: kernel/kernel
+all: kernel/kernel debug/kernel.S
 
 kernel/entry.o: kernel/entry.S
 	$(PREFIX)gcc -c -o $@ $<
@@ -47,8 +54,17 @@ test: kernel/kernel u-boot/u-boot.bin
 		-device loader,file=$< \
 		-qmp tcp:localhost:4444,server,wait=off
 
+debug/kernel.S: kernel/kernel
+	$(PREFIX)objdump -S $< > $@
+
+qemu: kernel/kernel
+	$(QEMU) \
+		-machine virt -bios none -kernel $< -m 128M -smp $(CPUS) -nographic \
+		-global virtio-mmio.force-legacy=false
+
 clean:
 	rm \
 		kernel/kernel \
 		kernel/*.o \
-		kernel/*.d
+		kernel/*.d \
+		debug/*.S

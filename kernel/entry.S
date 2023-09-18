@@ -5,18 +5,23 @@
 .section .text
 .global _entry
 _entry:
+        csrr a1, mhartid
+        # Do not use the hart which hartid is 0
+        # due to the hart does not support S-mode.
+        beq a1, zero, spin
+
         # set up a stack for C.
         # stack0 is declared in start.c,
         # with a 4096-byte stack per CPU.
         # sp = stack0 + (hartid * 4096)
         la sp, stack0
         li t0, 1024*4
-        addi t1, tp, 0
+        addi t1, a1, 0
         mul t0, t0, t1
         add sp, sp, t0
 
         # Pass hart id(0..3)
-        addi a0, tp, -1
+        addi a0, a1, -1
 
         # jump to start() in start.c
         call start
