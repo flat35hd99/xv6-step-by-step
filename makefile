@@ -12,8 +12,7 @@ K=kernel
 
 K_OBJS = kernel/entry.o # The order of objs is important.
 K_SRCS = $(shell ls kernel/*.c)
-K_OBJS = $(K_SRCS:%.c=%.o)
-K_OBJS += kernel/entry.o
+K_OBJS += $(K_SRCS:%.c=%.o)
 
 all: kernel/kernel debug/kernel.S
 
@@ -33,26 +32,6 @@ kernel/kernel: kernel/kernel.ld $(K_OBJS)
 		-T kernel/kernel.ld \
 		-o $@ \
 		$(K_OBJS)
-	$(PREFIX)objdump -D $@ > debug/kernel.S
-
-u-boot/u-boot.bin:
-	export CROSS_COMPILE=$(PREFIX) && $(MAKE) -C u-boot qemu-riscv64_defconfig
-	export CROSS_COMPILE=$(PREFIX) && $(MAKE) -C u-boot
-
-# QEMU's "-device loader" option extract ELF binary
-# at the address where the ELF binary specified.
-qemu: kernel/kernel u-boot/u-boot.bin
-	$(QEMU) \
-		-machine virt -bios u-boot/u-boot.bin -m 4G -smp $(CPUS) -nographic \
-		-global virtio-mmio.force-legacy=false \
-		-device loader,file=$<
-
-test: kernel/kernel u-boot/u-boot.bin
-	$(QEMU) \
-		-machine virt -bios u-boot/u-boot.bin -m 4G -smp $(CPUS) -nographic \
-		-global virtio-mmio.force-legacy=false -serial mon:stdio \
-		-device loader,file=$< \
-		-qmp tcp:localhost:4444,server,wait=off
 
 debug/kernel.S: kernel/kernel
 	$(PREFIX)objdump -S $< > $@
