@@ -34,6 +34,7 @@ kernel/kernel: kernel/kernel.ld $(K_OBJS)
 		$(K_OBJS)
 
 debug/kernel.S: kernel/kernel
+	if [ ! -d debug ]; then mkdir debug; fi
 	$(PREFIX)objdump -S $< > $@
 
 qemu: kernel/kernel
