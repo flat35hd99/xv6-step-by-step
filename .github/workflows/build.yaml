@@ -19,9 +19,10 @@ jobs:
             binutils-riscv64-linux-gnu
       - name: Build
         run: make -j
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+      - name: Run
+        run: timeout 3 make qemu | tee qemu.log
+      - name: Upload log
+        uses: actions/upload-artifact@v2
         with:
-          name: kernel
-          path: kernel/kernel
-          retention-days: 1
+          name: qemu.log
+          path: qemu.log
