@@ -42,6 +42,9 @@ qemu: kernel/kernel
 		-machine virt -bios none -kernel $< -m 128M -smp $(CPUS) -nographic \
 		-global virtio-mmio.force-legacy=false
 
+test: kernel/kernel
+	go test
+
 clean:
 	rm \
 		kernel/kernel \
