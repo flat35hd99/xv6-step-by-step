@@ -17,11 +17,6 @@ func TestPrintHellowWorld(t *testing.T) {
 
 	cmd := exec.CommandContext(ctx, "qemu-system-riscv64", "-machine", "virt", "-bios", "none", "-kernel", "kernel/kernel", "-m", "128M", "-smp", "4", "-nographic", "-global", "virtio-mmio.force-legacy=false")
 
-	stdin, err := cmd.StdinPipe()
-	if err != nil {
-		t.Fatal(err)
-	}
-
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		t.Fatal(err)
@@ -32,11 +27,6 @@ func TestPrintHellowWorld(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer cmd.Wait()
-
-	go func() {
-		defer stdin.Close()
-		io.WriteString(stdin, expected)
-	}()
 
 	resultBufProcessing := []byte{}
 	bufSize := 4096
