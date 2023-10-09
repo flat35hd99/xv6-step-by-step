@@ -1,4 +1,4 @@
-name: Build and publish document
+name: Build and test OS
 
 on:
   push:
@@ -16,7 +16,8 @@ jobs:
           sudo apt-get install \
             build-essential \
             gcc-riscv64-linux-gnu \
-            binutils-riscv64-linux-gnu
+            binutils-riscv64-linux-gnu \
+            qemu-system-misc
       - name: Build
         run: make -j
       - name: Test
