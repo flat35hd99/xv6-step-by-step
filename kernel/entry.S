@@ -6,9 +6,6 @@
 .global _entry
 _entry:
         csrr a1, mhartid
-        # Do not use the hart which hartid is 0
-        # due to the hart does not support S-mode.
-        beq a1, zero, spin
 
         # set up a stack for C.
         # stack0 is declared in start.c,
@@ -21,7 +18,7 @@ _entry:
         add sp, sp, t0
 
         # Pass hart id(0..3)
-        addi a0, a1, -1
+        addi a0, a1, 0
 
         # jump to start() in start.c
         call start
