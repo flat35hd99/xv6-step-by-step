@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - jh7110
+  pull_request:
 
 jobs:
   build:
