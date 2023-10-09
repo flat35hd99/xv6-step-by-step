@@ -1,4 +1,5 @@
 #include "defs.h"
+#include "riscv.h"
 
 void hello_world() {
   int n = 15;
@@ -11,4 +12,8 @@ void hello_world() {
   }
 }
 
-void main() { hello_world(); }
+int cpuid() { return r_tp(); }
+
+void main() {
+  if (cpuid() == 0) hello_world();
+}
