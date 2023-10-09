@@ -19,17 +19,17 @@ func TestPrintHellowWorld(t *testing.T) {
 
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	defer stdout.Close()
 
 	if err := cmd.Start(); err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	defer cmd.Wait()
 
