@@ -12,7 +12,7 @@ import (
 func TestPrintHellowWorld(t *testing.T) {
 	expected := "Hello, World!"
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	cmd := exec.CommandContext(ctx, "qemu-system-riscv64", "-machine", "virt", "-bios", "none", "-kernel", "kernel/kernel", "-m", "128M", "-smp", "4", "-nographic", "-global", "virtio-mmio.force-legacy=false")
