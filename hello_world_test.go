@@ -34,9 +34,6 @@ func TestPrintHellowWorld(t *testing.T) {
 	isSucessed := false
 	for {
 		n, err := stdout.Read(buf)
-		if err == io.EOF {
-			break
-		}
 
 		resultBufProcessing = append(resultBufProcessing, buf[:n]...)
 
@@ -45,6 +42,10 @@ func TestPrintHellowWorld(t *testing.T) {
 		if strings.Contains(result, expected) {
 			isSucessed = true
 			cancel()
+			break
+		}
+
+  if err == io.EOF {
 			break
 		}
 	}
