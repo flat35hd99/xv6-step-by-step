@@ -45,7 +45,7 @@ func TestPrintHellowWorld(t *testing.T) {
 			break
 		}
 
-  if err == io.EOF {
+		if err == io.EOF {
 			break
 		}
 	}
@@ -83,9 +83,6 @@ func TestJustPrintHellowWorld(t *testing.T) {
 	isSucessed := false
 	for {
 		n, err := stdout.Read(buf)
-		if err == io.EOF {
-			break
-		}
 
 		resultBufProcessing = append(resultBufProcessing, buf[:n]...)
 
@@ -94,6 +91,10 @@ func TestJustPrintHellowWorld(t *testing.T) {
 		if result == expected {
 			isSucessed = true
 			cancel()
+			break
+		}
+
+		if err == io.EOF {
 			break
 		}
 	}
