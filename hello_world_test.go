@@ -61,7 +61,7 @@ func TestPrintHellowWorld(t *testing.T) {
 func TestJustPrintHellowWorld(t *testing.T) {
 	expected := "Hello, World!\r\n"
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
 	cmd := exec.CommandContext(ctx, "qemu-system-riscv64", "-machine", "virt", "-bios", "none", "-kernel", "kernel/kernel", "-m", "128M", "-smp", "4", "-nographic", "-global", "virtio-mmio.force-legacy=false")
@@ -86,22 +86,15 @@ func TestJustPrintHellowWorld(t *testing.T) {
 
 		resultBufProcessing = append(resultBufProcessing, buf[:n]...)
 
-		// Write test here
-		result := string(resultBufProcessing)
-		if result == expected {
-			isSucessed = true
-			cancel()
-			break
-		}
-
 		if err == io.EOF {
 			break
 		}
 	}
 
+	println(string(resultBufProcessing))
 	if !isSucessed {
 		actual := string(resultBufProcessing)
-		if !strings.Contains(actual, expected) {
+		if actual != expected {
 			t.Fatalf("%s expected but %s got", expected, actual)
 		}
 	}
