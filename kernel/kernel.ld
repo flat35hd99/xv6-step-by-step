@@ -5,7 +5,7 @@ SECTIONS
 {
   /*
    * ensure that entry.S / _entry is at 0x80000000,
-   * where jh7110's jumps(???)
+   * QEMU emulator and jh7110 will jump into this address
    */
   . = 0x80000000;
 
