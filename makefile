@@ -6,7 +6,7 @@ QEMU=qemu-system-riscv64
 # 仮想マシンのhartの数
 # def.hで定義した値と一致させること
 # jh7110はSモード非対応なコアが1、Sモード対応なコアが4ある
-CPUS=5
+CPUS=8
 
 K=kernel
 
@@ -37,13 +37,25 @@ debug/kernel.S: kernel/kernel
 	if [ ! -d debug ]; then mkdir debug; fi
 	$(PREFIX)objdump -S $< > $@
 
+QEMUOPTS =  -machine virt -bios none -m 128M -smp $(CPUS) -nographic
+QEMUOPTS += -global virtio-mmio.force-legacy=false
+
 qemu: kernel/kernel
-	$(QEMU) \
-		-machine virt -bios none -kernel $< -m 128M -smp $(CPUS) -nographic \
-		-global virtio-mmio.force-legacy=false
+	$(QEMU) $(QEMUOPTS) -kernel $<
+		
 
 test: kernel/kernel
 	go test
+
+# try to generate a unique GDB port
+GDBPORT = $(shell expr `id -u` % 5000 + 25000)
+# QEMU's gdb stub command line changed in 0.11
+QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \
+	then echo "-gdb tcp::$(GDBPORT)"; \
+	else echo "-s -p $(GDBPORT)"; fi)
+
+qemu-gdb: kernel/kernel
+	$(QEMU) $(QEMUOPTS) -kernel $< -S $(QEMUGDB)
 
 clean:
 	rm \
