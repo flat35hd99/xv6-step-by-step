@@ -54,8 +54,8 @@ uartputc_sync(int c)
   // }
 
   // wait for Transmit Holding Empty to be set in LSR.
-  // while((ReadReg(LSR) & LSR_TX_IDLE) == 0)
-  //   ;
+  while((ReadReg(LSR) & LSR_TX_IDLE) == 0)
+    ;
   WriteReg(THR, c);
 
   // pop_off();
@@ -90,3 +90,55 @@ uartstart()
     WriteReg(THR, c);
   }
 }
+
+void
+uartinit(void)
+{
+  // disable interrupts.
+  WriteReg(IER, 0x00);
+
+  // special mode to set baud rate.
+  WriteReg(LCR, LCR_BAUD_LATCH);
+
+  // LSB for baud rate of 38.4K.
+  WriteReg(0, 0x03);
+
+  // MSB for baud rate of 38.4K.
+  WriteReg(1, 0x00);
+
+  // leave set-baud mode,
+  // and set word length to 8 bits, no parity.
+  WriteReg(LCR, LCR_EIGHT_BITS);
+
+  // reset and enable FIFOs.
+  WriteReg(FCR, FCR_FIFO_ENABLE | FCR_FIFO_CLEAR);
+
+  // enable transmit and receive interrupts.
+  WriteReg(IER, IER_TX_ENABLE | IER_RX_ENABLE);
+
+  // initlock(&uart_tx_lock, "uart");
+}
+
+// void
+// push_off(void)
+// {
+//   int old = intr_get();
+
+//   intr_off();
+//   if(mycpu()->noff == 0)
+//     mycpu()->intena = old;
+//   mycpu()->noff += 1;
+// }
+
+// void
+// pop_off(void)
+// {
+//   struct cpu *c = mycpu();
+//   if(intr_get())
+//     panic("pop_off - interruptible");
+//   if(c->noff < 1)
+//     panic("pop_off");
+//   c->noff -= 1;
+//   if(c->noff == 0 && c->intena)
+//     intr_on();
+// }

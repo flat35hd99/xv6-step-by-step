@@ -7,6 +7,8 @@
 #define MSTATUS_MPP_S (1L << 11)     // M: 11, S: 01, and U: 00
 #define MSTATUS_MPP_U (0L << 11)
 
+#define MSTATUS_MIE (1L << 3)    // machine-mode interrupt enable.
+
 static inline uint64 r_mstatus() {
   uint64 x;
   asm volatile("csrr %0, mstatus" : "=r"(x));
@@ -19,6 +21,10 @@ static inline void w_mstatus(uint64 x) {
 
 static inline void w_mepc(uint64 x) {
   asm volatile("csrw mepc, %0" : : "r"(x));
+}
+
+static inline void w_mtvec(uint64 x) {
+  asm volatile("csrw mtvec, %0" : : "r"(x));
 }
 
 static inline uint64 r_mhartid() {

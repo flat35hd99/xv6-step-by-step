@@ -3,6 +3,7 @@
 struct spinlock;
 
 // uart.c
+void uartinit();
 void uartputc_sync(int);
 
 // spinlock.c
